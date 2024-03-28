@@ -12,7 +12,7 @@ YOUTUBE_API_VERSION = "v3"
 def youtube_search(query_term, max_results):
     youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=DEVELOPER_KEY)
 
-    # Call the search.list method to retrieve results matching the specified query term.
+    # Call the search.list method to retrieve videos matching the specified query term.
     search_response = youtube.search().list(
         q=query_term,
         part="snippet",
@@ -20,15 +20,18 @@ def youtube_search(query_term, max_results):
         maxResults=max_results
     ).execute()
 
-    return search_response
+    # Extract the videos from the search response
+    videos = search_response.get("items", [])
+
+    return videos
 
 if __name__ == "__main__":
-    # Prompt the user for necessary input
+    # Prompt the user for the search query and max results
     query_term = input("Enter the search query: ")
     max_results = int(input("Enter the maximum number of results: "))
 
     # Perform the YouTube search
-    search_response = youtube_search(query_term, max_results)
+    video_list = youtube_search(query_term, max_results)
 
-    # Print the search response
-    print(search_response)
+    # Print the list of videos
+    print(video_list)
